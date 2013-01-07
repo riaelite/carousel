@@ -77,12 +77,12 @@
         _this._model = model;
         _this._element = element;
         
-        _this.checkParams = new Event(this);
-        _this.domBuilt = new Event(this);
-        _this.itemBuilt = new Event(this);
-        _this.triClicked = new Event(this);
-        _this.targetOver = new Event(this);
-        _this.targetLeave = new Event(this);
+        _this.checkParams = new Event(_this);
+        _this.domBuilt = new Event(_this);
+        _this.itemBuilt = new Event(_this);
+        _this.triClicked = new Event(_this);
+        _this.targetOver = new Event(_this);
+        _this.targetLeave = new Event(_this);
         
         target.delegate('.carousel_tri li', model.settings.triggerType, function() {
             var index = $(this).index();
@@ -101,11 +101,8 @@
     CarouselView.prototype = {
         init: function() {
             this.checkParams.notify();
-            
             this.initCss();
-            
             this.buildDom(this._model.settings.data);
-            
             this.domBuilt.notify();
         },
         initCss: function() {
@@ -283,20 +280,21 @@
             var _this = this,
                 target = $(_this._view._element),
                 liDom = $('.carousel_panel li', target).eq(index),
-                hasItem = this._model.getHasItem(liDom),
-                datas = this._model.settings.data,
+                hasItem = _this._model.getHasItem(liDom),
+                datas = _this._model.settings.data,
                 data = datas[index];
             if (!!hasItem) {
-                this.showItem(index);
+                _this.showItem(index);
             } else {
-                this.buildItem(data, index);
+                _this.buildItem(data, index);
             }
         },
         showItem: function(index) {
             var _this = this,
                 target = $(_this._view._element),
-                showType = _this._model.settings.showType,
-                speed = _this._model.settings.speed,
+                settings = _this._model.settings,
+                showType = settings.showType,
+                speed = settings.speed,
                 curCls = 'carousel_cur';
             this._view[showType + 'Item'](index);
             $('.carousel_txt li', target).eq(index).fadeIn(speed).siblings().fadeOut(speed);
@@ -347,8 +345,11 @@
             var model = new CarouselModel(options),
                 view = new CarouselView(model, this),   
                 controller = new CarouselController(model, view);
-            
-            view.init();
+            try {
+                view.init();
+            } catch(e) {
+                window.console && console.log(e);
+            }
         });
     };
 
