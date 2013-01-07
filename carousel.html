@@ -1,0 +1,526 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/carousel.source.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        if($.browser.msie) {
+            alert('拒绝 IE，从前端开始，请使用 Firefox / Chrome 等标准浏览器'); 
+        } else {
+            $('.mod').each(function() {
+                var _this = $(this),
+                    code = $.trim($('.demo', _this).html()).replace(/textarea>/, 'textarea>');
+                $('.code', _this).prepend($('<textarea>' + code + '</textarea>'));
+            });
+        }
+        
+        $('.mod_ft').each(function() {
+            $('<div class="to_top"><a href="#mod_header" title="返回顶部">返回顶部</a></div>').appendTo($(this));
+        });
+        
+        
+        $('a[href*=#]').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var $target = $(this.hash);
+                $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+                if ($target.length) {
+                    var targetOffset = $target.offset().top;
+                    $('html,body').animate({
+                        scrollTop : targetOffset
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+
+    })
+    </script>
+    <style type="text/css">
+        * {margin:0;padding:0;}
+        body{font:12px/1.4 SimSun,Arial,Helvetica,sans-serif;color:#333;}
+        strong{font-weight:700;}
+        :focus{outline:0;}
+        #mod_header,#mod_main,#mod_footer{width:1000px;margin:0 auto 20px;}
+        #mod_footer{margin:0 auto;padding-bottom:20px;font-family:Arial;}
+        #mod_header h1{font:700 22px/2 'Microsoft YaHei';text-align:center;}
+        #desc pre{font:13px/19px 'Lucida Console',Arial;color:#333;background-color:#F8F8F8;border:1px solid #CCC;padding:6px 10px;border-radius:3px;}
+        .mod{border-bottom:5px dashed #f00;margin-bottom:10px;padding-bottom:10px;}
+        .mod_hd{}
+        .mod_hd h2{margin-bottom:10px;padding:0 20px;font:700 16px/2 'Microsoft YaHei',SimSun;color:#fff;background:#104778;text-shadow:1px 1px 1px #8DB2E3;}
+        .mod_bd{}
+        .mod_ft strong{display:block;margin-bottom:5px;}
+        .mod_ft ul{margin-bottom:10px;}
+        .mod_ft li{list-style:disc inside none;line-height:20px;}
+        .demo,.code{margin-bottom:10px;}
+        .code textarea{margin:0;border:0 none;padding:0;width:100%;height:150px;font:12px/1.4 'Lucida Console',Arial;background:#ddd;resize:none;}
+        .to_top{text-align:right;}
+        .to_top a{text-decoration:none;}
+        #mod_footer{text-align:center;}
+    </style>
+    
+    <title>carousel.js - jQuery 按需加载轮播图插件</title>
+</head>
+<body>
+    <!-- S Header -->
+    <div id="mod_header">
+        <h1>carousel.js - jQuery 按需加载轮播图插件</h1>
+        <div id="desc">
+            <pre>
+/**
+ * @description 基于 jQuery 的按需加载轮播图插件
+ * @param data {Array} #必填# 轮播图的数据 [{url: '', img: '', text: ''}]
+          auto {boolean} #选填# 是否自动轮播
+          interval {number} #选填# 轮播间隔时间（毫秒）
+          speed {number} #选填# 轮播切换速度（毫秒）
+          width: {number} #选填# 轮播图宽度
+          height: {number} #选填# 轮播图高度
+          loadingImg: {String} #选填# 加载中图片地址
+          showType: {String} #选填# 显示轮播图方式 fade / horizontal / vertical
+          triggerType: {String} #选填# 触发轮播方式 click / mouseover
+ * @author i@wange.im
+ * @url http://wange.im/
+ * @version beta 0
+**/</pre>
+        </div>
+    </div>
+    <!-- E Header -->
+    
+    <!-- S Main -->
+    <div id="mod_main">
+        <!-- S module A -->
+        <div id="module_a" class="mod">
+            <div class="mod_hd">
+                <h2>用例一：参数 data 为必填，其他参数为选填</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo1"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo1').carousel({
+            data: [
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ]
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module A -->
+        
+        <!-- S module B -->
+        <div id="module_b" class="mod">
+            <div class="mod_hd">
+                <h2>用例二：参数 width / height 控制轮播图尺寸</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo2"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo2').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/6813/',
+                    img: 'img/4.jpg',
+                    text: '假面骑士WIZARD'
+                },
+                {
+                    url: 'http://v.61.com/riman/',
+                    img: 'img/6.jpg',
+                    text: '《刀剑神域》大完结'
+                },
+                {
+                    url: 'http://v.61.com/comic/7284/',
+                    img: 'img/5.jpg',
+                    text: '《百变机兽II元气星魂》重磅出击！'
+                }
+            ],
+            width: 400,
+            height: 210
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module B -->
+        
+        <!-- S module C -->
+        <div id="module_c" class="mod">
+            <div class="mod_hd">
+                <h2>用例三：参数 interval 调整自动轮播间隔时间</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo3"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo3').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            interval: 1000
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module C -->
+        
+        <!-- S module D -->
+        <div id="module_d" class="mod">
+            <div class="mod_hd">
+                <h2>用例四：参数 auto 可开启/关闭自动轮播</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo4"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo4').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            auto: false
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module D -->
+        
+        <!-- S module E -->
+        <div id="module_e" class="mod">
+            <div class="mod_hd">
+                <h2>用例五：参数 showType: 'horizontal' 水平方向轮播</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo5"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo5').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            showType: 'horizontal'
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module E -->
+        
+        <!-- S module F -->
+        <div id="module_f" class="mod">
+            <div class="mod_hd">
+                <h2>用例六：参数 showType: 'vertical' 垂直方向轮播</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo6"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo6').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            showType: 'vertical'
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module F -->
+        
+        <!-- S module G -->
+        <div id="module_g" class="mod">
+            <div class="mod_hd">
+                <h2>用例七：参数 triggerType: 'mouseover' 修改触发轮播方式</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo7"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo7').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            triggerType: 'mouseover'
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module G -->
+        
+        <!-- S module H -->
+        <div id="module_h" class="mod">
+            <div class="mod_hd">
+                <h2>用例八：参数 speed 调整轮播切换速度</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo8"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo8').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            showType: 'horizontal',
+            speed: 200
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module H -->
+        
+        <!-- S module I -->
+        <div id="module_h" class="mod">
+            <div class="mod_hd">
+                <h2>用例九：参数 loadingImg 显示加载中图片</h2>
+            </div>
+            <div class="mod_bd">
+                <div class="demo">
+<div id="demo9"></div>
+<script type="text/javascript">
+    $(function() {
+        $('#demo9').carousel({
+            data: [
+                {
+                    url: 'http://v.61.com/comic/7512/',
+                    img: 'img/7.jpg',
+                    text: '少年正义联盟'
+                },
+                {
+                    url: 'http://v.61.com/zt/shengrimengjingling/',
+                    img: 'img/8.jpg',
+                    text: '生日梦精灵'
+                },
+                {
+                    url: 'http://naruto.v.61.com/',
+                    img: 'img/1.jpg',
+                    text: '火影忍者中文网火影忍者中文网'
+                },
+                {
+                    url: 'http://v.61.com/comic/6948/',
+                    img: 'img/2.jpg',
+                    text: '《魔笛MAGI》阿拉丁来啦！'
+                },
+                {
+                    url: 'http://v.61.com/zt/molew/',
+                    img: 'img/3.jpg',
+                    text: '实现梦想《摩尔勇士补完计划》'
+                }
+            ],
+            loadingImg: 'img/loading.jpg',
+            showType: 'vertical',
+            speed: 2000,
+            auto: false
+        });
+    })
+</script>
+                </div>
+                <div class="code"></div>
+            </div>
+            <div class="mod_ft"></div>
+        </div>
+        <!-- E module I -->
+        
+    </div>
+    <!-- E Main -->
+    
+    <!-- S Footer -->
+    <div id="mod_footer">
+        <p>Copyright &copy; <a title="Life Studio" target="_blank" href="http://wange.im/">WanGe</a> All Rights Reserved.</p>
+    </div>
+    <!-- E Footer -->
+</body>
+</html>
