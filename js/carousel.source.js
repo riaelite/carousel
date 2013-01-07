@@ -37,8 +37,6 @@
         _this.setAllowSwitch = function(val) {
             allowSwitch = val;
         };
-        
-        
     }
     
     CarouselModel.prototype = {
@@ -191,11 +189,20 @@
                           
             $(this._element).html(carouseHtml);
         },
+        showItemCb: function(index) {
+            var _this = this,
+                target = $(_this._element),
+                speed = _this._model.settings.speed,
+                curCls = 'carousel_cur';
+            $('.carousel_txt li', target).eq(index).fadeIn(speed).siblings().fadeOut(speed);
+            $('.carousel_tri li', target).eq(index).addClass(curCls).siblings().removeClass(curCls);
+        },
         fadeItem: function(index) {
             var _this = this,
                 target = $(_this._element),
                 speed = _this._model.settings.speed;
             $('.carousel_panel li', target).eq(index).fadeIn(speed).siblings().fadeOut(speed);
+            _this.showItemCb(index);
         },
         horizontalItem: function(index) {
             var _this = this,
@@ -206,6 +213,7 @@
             $('.carousel_panel ul', target).animate({
                 marginLeft: - index * width
             }, speed);
+            _this.showItemCb(index);
         },
         verticalItem: function(index) {
             var _this = this,
@@ -216,6 +224,7 @@
             $('.carousel_panel ul', target).animate({
                 marginTop: - index * height
             }, speed);
+            _this.showItemCb(index);
         },
         buildItem: function(data, index) {
             var _this = this,
@@ -293,13 +302,9 @@
             var _this = this,
                 target = $(_this._view._element),
                 settings = _this._model.settings,
-                showType = settings.showType,
-                speed = settings.speed,
-                curCls = 'carousel_cur';
+                showType = settings.showType;
             this._view[showType + 'Item'](index);
-            $('.carousel_txt li', target).eq(index).fadeIn(speed).siblings().fadeOut(speed);
-            $('.carousel_tri li', target).eq(index).addClass(curCls).siblings().removeClass(curCls);
-            
+
             _this.setCurIndex(index);
         },
         buildItem: function(data, index) {
