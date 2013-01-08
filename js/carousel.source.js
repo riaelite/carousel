@@ -1,17 +1,17 @@
 /**
  * @description 基于 jQuery 的按需加载轮播图插件
- * @param data {Array} #必填# 轮播图的数据 [{url: '', img: '', text: ''}]
-          auto {boolean} #选填# 是否自动轮播
-          interval {number} #选填# 轮播间隔时间（毫秒）
-          speed {number} #选填# 轮播切换速度（毫秒）
-          width: {number} #选填# 轮播图宽度
-          height: {number} #选填# 轮播图高度
-          loadingImg: {String} #选填# 加载中图片地址
-          showType: {String} #选填# 显示轮播图方式 fade / horizontal / vertical
-          triggerType: {String} #选填# 触发轮播方式 click / mouseover
+ * @param data {Array} 轮播图的数据 [{url: '', img: '', text: ''}]
+          auto {boolean} 是否自动轮播
+          interval {number} 轮播间隔时间（毫秒）
+          speed {number} 轮播切换速度（毫秒）
+          width: {number} 轮播图宽度
+          height: {number} 轮播图高度
+          loadingImg: {String} 加载中图片地址
+          showType: {String} 显示轮播图方式 fade / horizontal / vertical
+          triggerType: {String} 触发轮播方式 click / mouseover
  * @author i@wange.im
  * @url http://wange.im/
- * @version beta 0
+ * @version 0.1
 **/
 
 ;(function ($) {
@@ -56,6 +56,7 @@
         _this._model = model;
         _this._element = element;
         
+        _this.domHandle = new Event(_this);
         _this.domBuilt = new Event(_this);
         _this.itemBuilt = new Event(_this);
         _this.triClicked = new Event(_this);
@@ -79,7 +80,9 @@
     CarouselView.prototype = {
         // 初始化
         init: function() {
-            this.initCss().buildDom(this._model.settings.data);
+            this.initCss().domHandle.notify();
+            
+            // this.buildDom(this._model.settings.data);
         },
         // 初始化样式
         initCss: function() {
@@ -252,6 +255,22 @@
 
         _this._model = model;
         _this._view = view;
+        
+        view.domHandle.attach(function() {
+            // 如果没有 data 参数
+            if (!settings.data.length) {
+                var li = $('li', view._element);
+                
+                li.each(function() {
+                    var _this = $(this),
+                        url = $('a', _this).attr('href'),
+                        img = $('img', _this).attr('src'),
+                        text = $('img', _this).attr('alt');
+                    settings.data.push({url: url, img: img, text: text});
+                });
+            }
+            view.buildDom(settings.data);
+        });
         
         view.domBuilt.attach(function(sender) {
             var index = model.getCurIndex(),
