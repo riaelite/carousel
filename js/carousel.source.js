@@ -104,27 +104,25 @@
             this.domBuilt.notify();
         },
         initCss: function() {
+            
             var _this = this,
                 type = _this._model.settings.showType,
                 width = _this._model.settings.width,
                 height = _this._model.settings.height,
                 target = $(_this._element),
-                showStyle,
                 publicStyle = '.carousel{position:relative;overflow:hidden;border-radius:5px;}' +
-                        '.carousel img{border-radius:5px;}' +
-                        '.carousel_panel{position:absolute;z-index:1;width:100%;height:100%;}' +
-                        '.carousel_panel ul{width:100%;height:100%;padding:0;margin:0;list-style:none;}' +
-                        '.carousel_panel li{width:100%;height:100%;overflow:hidden;vertical-align:bottom;}' +
-                        '.carousel_panel a{display:block;width:100%;height:100%;}' +
-                        '.carousel_panel img{width:100%;height:100%;display:block;border:0 none;}' +
-                        '.carousel_tri{position:absolute;height:46px;bottom:0;left:0;background:#000;opacity:0.8;filter:alpha(opacity=80);width:100%;border-radius:0 0 5px 5px;z-index:2;}' +
-                        '.carousel_tri ul{height:22px;position:absolute;right:8px;top:12px;padding:0;margin:0;list-style:none;}' +
-                        '.carousel_tri li{width:22px;height:22px;float:left;margin-right:7px;display:inline;}' +
-                        '.carousel_tri li a{width:100%;height:100%;display:block;border-radius:2px;font:12px/22px Tahoma,Arial;color:#fff;text-align:center;text-decoration:none;background:#2D2D2D;}' +
-                        '.carousel_tri li a:hover,.carousel_tri .carousel_cur a{background:#FF9202;text-decoration:none;}' +
-                        '.carousel_txt{height:46px;font:18px/46px "Microsoft YaHei";color:#fff;position:absolute;bottom:0;left:15px;overflow:hidden;z-index:3;}' +
-                        '.carousel_txt ul{padding:0;margin:0;list-style:none;}',
-                        
+                              '.carousel_panel{position:absolute;z-index:1;width:100%;height:100%;}' +
+                              '.carousel_panel ul{width:100%;height:100%;padding:0;margin:0;list-style:none;}' +
+                              '.carousel_panel li{width:100%;height:100%;overflow:hidden;vertical-align:bottom;}' +
+                              '.carousel_panel a{display:block;width:100%;height:100%;}' +
+                              '.carousel_panel img{width:100%;height:100%;display:block;border:0 none;border-radius:5px;}' +
+                              '.carousel_tri{position:absolute;height:46px;bottom:0;left:0;background:#000;opacity:0.8;filter:alpha(opacity=80);width:100%;border-radius:0 0 5px 5px;z-index:2;}' +
+                              '.carousel_tri ul{height:22px;position:absolute;right:8px;top:12px;padding:0;margin:0;list-style:none;}' +
+                              '.carousel_tri li{width:22px;height:22px;float:left;margin-right:7px;display:inline;}' +
+                              '.carousel_tri li a{width:100%;height:100%;display:block;border-radius:2px;font:12px/22px Tahoma,Arial;color:#fff;text-align:center;text-decoration:none;background:#2D2D2D;}' +
+                              '.carousel_tri li a:hover,.carousel_tri .carousel_cur a{background:#FF9202;text-decoration:none;}' +
+                              '.carousel_txt{height:46px;font:18px/46px "Microsoft YaHei";color:#fff;position:absolute;bottom:0;left:15px;overflow:hidden;z-index:3;}' +
+                              '.carousel_txt ul{padding:0;margin:0;list-style:none;}',
                 fadeStyle = '.carousel_fade .carousel_panel li{position:absolute;display:none;}',
                 horizontalStyle = '.carousel_horizontal .carousel_panel ul{width:9999px;}' +
                                   '.carousel_horizontal .carousel_panel li{float:left;display:block;width:' + width + 'px;}';
@@ -138,21 +136,21 @@
             switch(type) {
                 case 'fade':
                     target.addClass('carousel_fade');
-                    showStyle = fadeStyle;
                 break;
                 
                 case 'horizontal':
                     target.addClass('carousel_horizontal');
-                    showStyle = horizontalStyle;
                 break;
                 
                 case 'vertical':
                     target.addClass('carousel_vertical');
-                    showStyle = verticalStyle;
                 break;
             }
-            
-            $('head').append('<style type="text/css">' + publicStyle + showStyle + '</style>');
+            if (!!$('head').data('css_loaded')) {
+                return;
+            }
+            var showStyle = publicStyle + fadeStyle + horizontalStyle + verticalStyle;
+            $('head').append('<style type="text/css">' + showStyle + '</style>').data('css_loaded', true);
         },
         buildDom: function(data) {
             var carouselPanel = '',
