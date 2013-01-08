@@ -128,6 +128,9 @@
                 width: width,
                 height: height
             });
+            $('.carousel_txt', target).css({
+                width: width - $('.carousel_tri ul', target).width() - 23
+            });
             
             switch(settings.showType) {
                 case 'fade':
@@ -305,7 +308,7 @@
                 target = $(_this._view._element),
                 settings = _this._model.settings,
                 showType = settings.showType;
-            this._view[showType + 'Item'](index);
+            _this._view[showType + 'Item'](index);
 
             _this.setCurIndex(index);
             return this;
