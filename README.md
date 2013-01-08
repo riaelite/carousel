@@ -49,12 +49,12 @@ $('#demo1').carousel({
     &lt;div class="carousel_panel"&gt;
         &lt;ul&gt;
             &lt;li&gt;
-                &lt;a target="_blank" title="Life Studio" href="http://v.61.com/comic/7512/"&gt;
+                &lt;a target="_blank" title="Life Studio" href="http://wange.im/"&gt;
                     &lt;img src="img/1.jpg" alt="Life Studio" /&gt;
                 &lt;/a&gt;
             &lt;/li&gt;
             &lt;li&gt;
-                &lt;a target="_blank" title="@wange1228" href="http://v.61.com/zt/shengrimengjingling/"&gt;
+                &lt;a target="_blank" title="@wange1228" href="http://t.qq.com/wange1228"&gt;
                     &lt;img src="img/2.jpg" alt="@wange1228" /&gt;
                 &lt;/a&gt;
             &lt;/li&gt;
