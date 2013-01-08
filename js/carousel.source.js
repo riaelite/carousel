@@ -11,7 +11,7 @@
           triggerType: {String} 触发轮播方式 click / mouseover
  * @author i@wange.im
  * @url http://wange.im/
- * @version 0.1
+ * @version 0.1.2
 **/
 
 ;(function ($) {

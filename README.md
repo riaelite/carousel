@@ -7,6 +7,7 @@
     <li>支持自动轮播</li>
     <li>多样化的轮播效果</li>
     <li>可选的轮播触发方式</li>
+    <li>支持两种模式：全自动（无需 Dom 节点）和半自动（需要 Dom 节点）</li>
     <li>可自定义的轮播图尺寸</li>
     <li>可自定义的预加载图片</li>
     <li>可自定义的轮播切换速度</li>
@@ -19,13 +20,14 @@
     <li>采用 MVC 模式，易扩展，易维护。</li>
 </ul>
 <h2>开始使用</h2>
+<h3>全自动模式</h3>
 <p>简单来说，就是<strong>一个空标签 + 一段 JS 调用 = 一个轮播图</strong>，甚至都不需要写样式。</p>
-<h3>Html</h3>
+<h4>HTML</h4>
 <pre>
-&lt;div id="demo"&gt;&lt;/div&gt;</pre>
-<h3>JavaScript</h3>
+&lt;div id="demo1"&gt;&lt;/div&gt;</pre>
+<h4>JavaScript</h4>
 <pre>
-$('#demo').carousel({
+$('#demo1').carousel({
     data: [
         {
             url: 'http://wange.im/',
@@ -39,6 +41,29 @@ $('#demo').carousel({
         }
     ]
 });</pre>
+<h3>半自动模式</h3>
+<p>出于 SEO 的考虑，我们可能需要用 HTML 建立节点，插件也是支持这种情况的。这时我们需要如下结构的 HTML + JavaScript：</p>
+<h4>HTML</h4>
+<pre>
+&lt;div id="demo2"&gt;
+    &lt;div class="carousel_panel"&gt;
+        &lt;ul&gt;
+            &lt;li&gt;
+                &lt;a target="_blank" title="Life Studio" href="http://v.61.com/comic/7512/"&gt;
+                    &lt;img src="img/1.jpg" alt="Life Studio" /&gt;
+                &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;a target="_blank" title="@wange1228" href="http://v.61.com/zt/shengrimengjingling/"&gt;
+                    &lt;img src="img/2.jpg" alt="@wange1228" /&gt;
+                &lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+<h4>JavaScript</h4>
+<pre>
+$('#demo2').carousel();</pre>
 <p>这样就完成了一个简单的轮播图，如果需要更多个性化的功能，还可以参看以下参数。</p>
 <h2>可选参数</h2>
 <pre>
@@ -55,11 +80,10 @@ $('#demo').carousel({
           triggerType: {String} #选填# 触发轮播方式 click / mouseover
  * @author i@wange.im
  * @url http://wange.im/
- * @version beta 0
+ * @version 0.1.2
 **/</pre>
 <h2>即将上线的功能</h2>
 <ul>
-    <li>支持已有 Dom 结构的轮播图（主要考虑到 SEO 的需求）</li>
     <li>支持每次轮播的回调事件</li>
     <li>支持自定义样式</li>
     <li><a href="mailto:i@wange.im" title="给我发邮件">听听你的意见</a></li>
