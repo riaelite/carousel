@@ -10,7 +10,7 @@
           showType: {String} 显示轮播图方式 fade / horizontal / vertical
           triggerType: {String} 触发轮播方式 click / mouseover
  * @author i@wange.im
- * @url http://wange.im/
+ * @url https://github.com/wange1228/carousel
  * @version 0.1.2
 **/
 
@@ -81,12 +81,10 @@
         // 初始化
         init: function() {
             this.initCss().domHandle.notify();
-            
-            // this.buildDom(this._model.settings.data);
         },
         // 初始化样式
         initCss: function() {
-            // 所有实例共用一个样式，如果已加载过，则返回
+            // 所有实例共用一个公共样式，如果已加载过，则返回
             if (!!$('head').data('css_loaded')) return this;
             
             var _this = this,

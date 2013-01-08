@@ -79,7 +79,7 @@ $('#demo2').carousel();</pre>
           showType: {String} 显示轮播图方式 fade / horizontal / vertical
           triggerType: {String} 触发轮播方式 click / mouseover
  * @author i@wange.im
- * @url http://wange.im/
+ * @url https://github.com/wange1228/carousel
  * @version 0.1.2
 **/</pre>
 <h2>即将上线的功能</h2>
