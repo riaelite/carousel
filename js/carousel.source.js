@@ -45,25 +45,6 @@
         },
         setHasItem: function(liDom) {
             liDom.data('has_item', true);
-        },
-        checkParams: function() {
-            var options = $.fn.carousel.defaults,
-                st = this.settings,
-                triggerTypeArr = ['click', 'mouseover'],
-                showTypeArr = ['fade', 'horizontal', 'vertical'];
-                
-            for (var i in options) {
-                if (typeof options[i] !== typeof st[i]) {
-                    window.console && console.log(i + ': ' + st[i] + ' is invalid.');
-                }
-            }
-            if ($.inArray(st.triggerType, triggerTypeArr) === -1) {
-                window.console && console.log('triggerType: ' + st.triggerType + ' is invalid.');
-            }
-            if ($.inArray(st.showType, showTypeArr) === -1) {
-                window.console && console.log('showType: ' + st.showType + ' is invalid.');
-            }
-            this.settings.interval = this.settings.interval < this.settings.speed ? this.settings.speed : this.settings.interval;
         }
     };
     
@@ -75,7 +56,6 @@
         _this._model = model;
         _this._element = element;
         
-        _this.checkParams = new Event(_this);
         _this.domBuilt = new Event(_this);
         _this.itemBuilt = new Event(_this);
         _this.triClicked = new Event(_this);
@@ -97,8 +77,8 @@
     }
     
     CarouselView.prototype = {
+        // 初始化
         init: function() {
-            this.checkParams.notify();
             this.initCss();
             this.buildDom(this._model.settings.data);
             this.domBuilt.notify();
@@ -107,8 +87,8 @@
             
             var _this = this,
                 type = _this._model.settings.showType,
-                width = _this._model.settings.width,
-                height = _this._model.settings.height,
+                width = parseInt(_this._model.settings.width, 10),
+                height = parseInt(_this._model.settings.height, 10),
                 target = $(_this._element),
                 publicStyle = '.carousel{position:relative;overflow:hidden;border-radius:5px;}' +
                               '.carousel_panel{position:absolute;z-index:1;width:100%;height:100%;}' +
@@ -277,9 +257,6 @@
         view.targetLeave.attach(function () {
             _this.setAllowSwitch(true);
         });
-        view.checkParams.attach(function() {
-            _this.checkParams();
-        });
     }
     
     CarouselController.prototype = {
@@ -318,9 +295,6 @@
             var target = $(sender._element),
                 liDom = $('.carousel_panel li', target).eq(index);
             this._model.setHasItem(liDom);
-        },
-        checkParams: function() {
-            this._model.checkParams();
         }
     };
     
@@ -344,14 +318,15 @@
     
     $.fn.carousel = function(options) {
         return this.each(function(key, value) {
-        
             var model = new CarouselModel(options),
-                view = new CarouselView(model, this),   
+                view = new CarouselView(model, value),
                 controller = new CarouselController(model, view);
+                
+            // 保证每个实例互不影响
             try {
                 view.init();
             } catch(e) {
-                window.console && console.log(e);
+                window.console && console.log(msg);
             }
         });
     };
