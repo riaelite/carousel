@@ -79,16 +79,15 @@
     CarouselView.prototype = {
         // 初始化
         init: function() {
-            this.initCss();
             this.buildDom(this._model.settings.data);
             this.domBuilt.notify();
         },
+        // 初始化样式
         initCss: function() {
-            
             var _this = this,
-                type = _this._model.settings.showType,
-                width = parseInt(_this._model.settings.width, 10),
-                height = parseInt(_this._model.settings.height, 10),
+                settings = _this._model.settings,
+                width = parseInt(settings.width, 10),
+                height = parseInt(settings.height, 10),
                 target = $(_this._element),
                 publicStyle = '.carousel{position:relative;overflow:hidden;border-radius:5px;}' +
                               '.carousel_panel{position:absolute;z-index:1;width:100%;height:100%;}' +
@@ -103,32 +102,12 @@
                               '.carousel_tri li a:hover,.carousel_tri .carousel_cur a{background:#FF9202;text-decoration:none;}' +
                               '.carousel_txt{height:46px;font:18px/46px "Microsoft YaHei";color:#fff;position:absolute;bottom:0;left:15px;overflow:hidden;z-index:3;}' +
                               '.carousel_txt ul{padding:0;margin:0;list-style:none;}',
-                fadeStyle = '.carousel_fade .carousel_panel li{position:absolute;display:none;background:#fff;}',
+                fadeStyle = '.carousel_fade .carousel_panel li{position:absolute;background:#fff;}',
                 horizontalStyle = '.carousel_horizontal .carousel_panel ul{width:9999px;}' +
-                                  '.carousel_horizontal .carousel_panel li{float:left;display:block;width:' + width + 'px;}';
+                                  '.carousel_horizontal .carousel_panel li{float:left;display:block;}';
                 verticalStyle = '.carousel_vertical .carousel_panel ul{height:9999px;}' +
-                                '.carousel_vertical .carousel_panel li{display:block;height:' + height + 'px;}';
-            target.addClass('carousel').css({
-                width: _this._model.settings.width,
-                height: _this._model.settings.height
-            });
-            
-            switch(type) {
-                case 'fade':
-                    target.addClass('carousel_fade');
-                break;
-                
-                case 'horizontal':
-                    target.addClass('carousel_horizontal');
-                break;
-                
-                case 'vertical':
-                    target.addClass('carousel_vertical');
-                break;
-            }
-            if (!!$('head').data('css_loaded')) {
-                return;
-            }
+                                '.carousel_vertical .carousel_panel li{display:block;}';
+                                
             var showStyle = publicStyle + fadeStyle + horizontalStyle + verticalStyle;
             $('head').append('<style type="text/css">' + showStyle + '</style>').data('css_loaded', true);
         },
@@ -229,9 +208,35 @@
         _this._view = view;
         
         view.domBuilt.attach(function() {
-            var index = model.getCurIndex();
-            
+            var index = model.getCurIndex(),
+                target = $(view._element),
+                width = parseInt(settings.width, 10),
+                height = parseInt(settings.height, 10);
+                
+            _this.initCss();
             _this.buildItem(settings.data[index], index);
+            
+            target.addClass('carousel').css({
+                width: width,
+                height: height
+            });
+            $('.carousel_panel li', target).css({
+                width: width,
+                height: height
+            })
+            switch(settings.showType) {
+                case 'fade':
+                    target.addClass('carousel_fade');
+                break;
+                
+                case 'horizontal':
+                    target.addClass('carousel_horizontal');
+                break;
+                
+                case 'vertical':
+                    target.addClass('carousel_vertical');
+                break;
+            }
             
             if (!!settings.auto) {
                 setInterval(function() {
@@ -260,6 +265,13 @@
     }
     
     CarouselController.prototype = {
+        initCss: function() {
+            if (!!$('head').data('css_loaded')) {
+                return;
+            }
+            
+            this._view.initCss();
+        },
         handleItem: function(index) {
             var _this = this,
                 target = $(_this._view._element),
@@ -326,7 +338,7 @@
             try {
                 view.init();
             } catch(e) {
-                window.console && console.log(msg);
+                window.console && console.log(e);
             }
         });
     };
