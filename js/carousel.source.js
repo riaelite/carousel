@@ -79,11 +79,13 @@
     CarouselView.prototype = {
         // 初始化
         init: function() {
-            this.buildDom(this._model.settings.data);
-            this.domBuilt.notify();
+            this.initCss().buildDom(this._model.settings.data);
         },
         // 初始化样式
         initCss: function() {
+            // 所有实例共用一个样式，如果已加载过，则返回
+            if (!!$('head').data('css_loaded')) return this;
+            
             var _this = this,
                 settings = _this._model.settings,
                 width = parseInt(settings.width, 10),
@@ -110,17 +112,50 @@
                                 
             var showStyle = publicStyle + fadeStyle + horizontalStyle + verticalStyle;
             $('head').append('<style type="text/css">' + showStyle + '</style>').data('css_loaded', true);
+            
+            return this;
         },
+        // 给每个实例单独设置样式
+        setStyle: function(target, settings) {
+            var width = parseInt(settings.width, 10),
+                height = parseInt(settings.height, 10);
+                
+            target.addClass('carousel').css({
+                width: width,
+                height: height
+            });
+            $('.carousel_panel li', target).css({
+                width: width,
+                height: height
+            });
+            
+            switch(settings.showType) {
+                case 'fade':
+                    target.addClass('carousel_fade');
+                break;
+                
+                case 'horizontal':
+                    target.addClass('carousel_horizontal');
+                break;
+                
+                case 'vertical':
+                    target.addClass('carousel_vertical');
+                break;
+            }
+            
+            return this;
+        },
+        // 建立节点
         buildDom: function(data) {
             var carouselPanel = '',
                 carouselTri = '',
-                carouseHtml = '',
                 carouselDesc = '',
+                carouseHtml = '',
                 i = 0,
-                l = data.length,
+                l = data ? data.length : 0,
                 loadingSrc = this._model.settings.loadingImg,
                 img = loadingSrc ? '<img src="' + loadingSrc +'" alt="Loading" />' : '';
-                
+            
             for (i; i<l; i++) {
                 carouselPanel += '<li>' + img + '</li>';
                 carouselTri += '<li><a href="javascript:;">' + (i+1) + '</a></li>';
@@ -143,8 +178,10 @@
                           '    </ul>' +
                           '</div>' +
                           '<!-- E Carousel -->';
-                          
-            $(this._element).html(carouseHtml);
+            this._element.innerHTML = carouseHtml;
+            this.domBuilt.notify();
+            
+            return this;
         },
         showItemCb: function(index) {
             var _this = this,
@@ -153,6 +190,8 @@
                 curCls = 'carousel_cur';
             $('.carousel_txt li', target).eq(index).fadeIn(speed).siblings().fadeOut(speed);
             $('.carousel_tri li', target).eq(index).addClass(curCls).siblings().removeClass(curCls);
+            
+            return this;
         },
         fadeItem: function(index) {
             var _this = this,
@@ -160,6 +199,7 @@
                 speed = _this._model.settings.speed;
             $('.carousel_panel li', target).eq(index).fadeIn(speed).siblings().fadeOut(speed);
             _this.showItemCb(index);
+            return this;
         },
         horizontalItem: function(index) {
             var _this = this,
@@ -171,6 +211,7 @@
                 marginLeft: - index * width
             }, speed);
             _this.showItemCb(index);
+            return this;
         },
         verticalItem: function(index) {
             var _this = this,
@@ -182,6 +223,7 @@
                 marginTop: - index * height
             }, speed);
             _this.showItemCb(index);
+            return this;
         },
         buildItem: function(data, index) {
             var _this = this,
@@ -196,6 +238,7 @@
             $('.carousel_txt li', target).eq(index).html(text);
             
             _this.itemBuilt.notify({index: index});
+            return this;
         }
     };
     
@@ -207,36 +250,11 @@
         _this._model = model;
         _this._view = view;
         
-        view.domBuilt.attach(function() {
+        view.domBuilt.attach(function(sender) {
             var index = model.getCurIndex(),
-                target = $(view._element),
-                width = parseInt(settings.width, 10),
-                height = parseInt(settings.height, 10);
-                
-            _this.initCss();
-            _this.buildItem(settings.data[index], index);
+                target = $(sender._element);
             
-            target.addClass('carousel').css({
-                width: width,
-                height: height
-            });
-            $('.carousel_panel li', target).css({
-                width: width,
-                height: height
-            })
-            switch(settings.showType) {
-                case 'fade':
-                    target.addClass('carousel_fade');
-                break;
-                
-                case 'horizontal':
-                    target.addClass('carousel_horizontal');
-                break;
-                
-                case 'vertical':
-                    target.addClass('carousel_vertical');
-                break;
-            }
+            _this.setStyle(target, settings).buildItem(settings.data[index], index);
             
             if (!!settings.auto) {
                 setInterval(function() {
@@ -250,8 +268,7 @@
             }
         });
         view.itemBuilt.attach(function(sender, args) {
-            _this.setHasItem(sender, args.index);
-            _this.showItem(args.index);
+            _this.setHasItem(sender, args.index).showItem(args.index);
         });
         view.triClicked.attach(function (sender, args) {
             _this.handleItem(args.index);
@@ -265,12 +282,9 @@
     }
     
     CarouselController.prototype = {
-        initCss: function() {
-            if (!!$('head').data('css_loaded')) {
-                return;
-            }
-            
-            this._view.initCss();
+        setStyle: function(target, settings) {
+            this._view.setStyle(target, settings);
+            return this;
         },
         handleItem: function(index) {
             var _this = this,
@@ -284,6 +298,7 @@
             } else {
                 _this.buildItem(data, index);
             }
+            return this;
         },
         showItem: function(index) {
             var _this = this,
@@ -293,20 +308,25 @@
             this._view[showType + 'Item'](index);
 
             _this.setCurIndex(index);
+            return this;
         },
         buildItem: function(data, index) {
             this._view.buildItem(data, index);
+            return this;
         },
         setCurIndex: function(index) {
             this._model.setCurIndex(index);
+            return this;
         },
         setAllowSwitch: function(val) {
             this._model.setAllowSwitch(val);
+            return this;
         },
         setHasItem: function(sender, index) {
             var target = $(sender._element),
                 liDom = $('.carousel_panel li', target).eq(index);
             this._model.setHasItem(liDom);
+            return this;
         }
     };
     
