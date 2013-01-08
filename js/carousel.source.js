@@ -123,7 +123,7 @@
                               '.carousel_tri li a:hover,.carousel_tri .carousel_cur a{background:#FF9202;text-decoration:none;}' +
                               '.carousel_txt{height:46px;font:18px/46px "Microsoft YaHei";color:#fff;position:absolute;bottom:0;left:15px;overflow:hidden;z-index:3;}' +
                               '.carousel_txt ul{padding:0;margin:0;list-style:none;}',
-                fadeStyle = '.carousel_fade .carousel_panel li{position:absolute;display:none;}',
+                fadeStyle = '.carousel_fade .carousel_panel li{position:absolute;display:none;background:#fff;}',
                 horizontalStyle = '.carousel_horizontal .carousel_panel ul{width:9999px;}' +
                                   '.carousel_horizontal .carousel_panel li{float:left;display:block;width:' + width + 'px;}';
                 verticalStyle = '.carousel_vertical .carousel_panel ul{height:9999px;}' +
